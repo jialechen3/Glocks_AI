@@ -1,0 +1,18 @@
+# Sensitive tokens and session keys
+token.json
+.env
+.env.local
+.env.development
+.env.production
+*.pem
+*.key
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Python files (if you build your backend here later)
+__pycache__/
+*.pyc
+venv/
+.venv/

@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "AI Email Assistant",
+  "version": "1.0",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module" 
+  },
+  "permissions": [
+    "identity"
+  ],
+  "oauth2": {
+    "client_id": "473167517964-l6dfja1f4unke3qkhaurqftnuj7ov170.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/gmail.modify"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 300px;
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      margin: 0;
+    }
+    textarea {
+      width: 100%;
+      height: 60px;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 8px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #status {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h3>AI Email Agent</h3>
+  <textarea id="command" placeholder="e.g., Delete all advertisement emails..."></textarea>
+  <button id="sendBtn">Execute Command</button>
+  <div id="status"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
