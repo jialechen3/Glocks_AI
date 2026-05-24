@@ -109,21 +109,23 @@
 
   <div class="header">Glooks Mail AI Assistant</div>
 
+  <!-- Scrollable Message Feed -->
   <div class="chat-container" id="chatContainer">
     <div class="message ai">Hi! I'm your email assistant. What can I help you clean up or organize today?</div>
   </div>
 
+  <!-- Quick Action Suggestion Chips -->
   <div class="quick-actions">
-    <button class="chip-btn" id="cleanAdsBtn">Clean recent 100 ads</button>
-    <button class="chip-btn" id="quickOrgBtn">Quick organize inbox</button>
-    <button class="chip-btn" id="testRecentBtn">Test recent 10 mail</button>
+    <button class="chip-btn" id="cleanAdsBtn">✨ Clean recent 100 ads</button>
+    <button class="chip-btn" id="quickOrgBtn">📂 Quick organize inbox</button>
   </div>
 
+  <!-- Input Area -->
   <div class="input-container">
     <input type="text" id="userInput" placeholder="Ask me to sort, delete, or unsubscribe...">
-    <button id="sendBtn">></button>
+    <button id="sendBtn">➔</button>
   </div>
 
-  <script type="module" src="popup.js"></script>
+  <script src="popup.js"></script>
 </body>
 </html>
