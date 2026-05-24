@@ -4,41 +4,126 @@
   <meta charset="utf-8">
   <style>
     body {
-      width: 300px;
-      font-family: Arial, sans-serif;
-      padding: 10px;
+      width: 360px;
+      height: 500px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      background-color: #f9f9f9;
     }
-    textarea {
-      width: 100%;
-      height: 60px;
-      margin-bottom: 8px;
-      box-sizing: border-box;
+    .header {
+      padding: 12px 16px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      font-weight: 600;
+      font-size: 15px;
+      color: #333;
     }
-    button {
-      width: 100%;
-      padding: 8px;
-      background-color: #4CAF50;
+    .chat-container {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .message {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .message.user {
+      background-color: #007aff;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+    .message.ai {
+      background-color: #e9e9eb;
+      color: #333;
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      padding: 8px 16px;
+      background-color: #f9f9f9;
+      flex-wrap: wrap;
+    }
+    .chip-btn {
+      background-color: #ffffff;
+      border: 1px solid #d1d1d6;
+      border-radius: 16px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .chip-btn:hover {
+      background-color: #e0e0e0;
+      border-color: #a1a1a6;
+    }
+    .input-container {
+      padding: 12px 16px;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 8px;
+    }
+    input {
+      flex: 1;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      padding: 8px 14px;
+      font-size: 13px;
+      outline: none;
+    }
+    input:focus {
+      border-color: #007aff;
+    }
+    #sendBtn {
+      background-color: #007aff;
       color: white;
       border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
       cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    button:hover {
-      background-color: #45a049;
-    }
-    #status {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #666;
+    #sendBtn:hover {
+      background-color: #0051ba;
     }
   </style>
 </head>
 <body>
-  <h3>AI Email Agent</h3>
-  <textarea id="command" placeholder="e.g., Delete all advertisement emails..."></textarea>
-  <button id="sendBtn">Execute Command</button>
-  <div id="status"></div>
 
-  <script src="popup.js"></script>
+  <div class="header">Glooks Mail AI Assistant</div>
+
+  <div class="chat-container" id="chatContainer">
+    <div class="message ai">Hi! I'm your email assistant. What can I help you clean up or organize today?</div>
+  </div>
+
+  <div class="quick-actions">
+    <button class="chip-btn" id="cleanAdsBtn">Clean recent 100 ads</button>
+    <button class="chip-btn" id="quickOrgBtn">Quick organize inbox</button>
+    <button class="chip-btn" id="testRecentBtn">Test recent 10 mail</button>
+  </div>
+
+  <div class="input-container">
+    <input type="text" id="userInput" placeholder="Ask me to sort, delete, or unsubscribe...">
+    <button id="sendBtn">></button>
+  </div>
+
+  <script type="module" src="popup.js"></script>
 </body>
 </html>

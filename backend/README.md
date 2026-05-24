@@ -1,0 +1,35 @@
+# FastAPI Backend
+
+This backend accepts a Gmail access token from the Chrome extension, fetches message data from the Gmail API, and returns a simplified email payload that is easier to feed into AI pipelines.
+
+## Run locally
+
+1. Create and activate a virtual environment.
+2. Install dependencies:
+
+```bash
+pip install -r backend/requirements.txt
+```
+
+3. Start the server:
+
+```bash
+uvicorn backend.main:app --reload
+```
+
+The app will be available at `http://127.0.0.1:8000`.
+
+## Current endpoint
+
+- `POST /api/gmail/prepare`
+
+Example request body:
+
+```json
+{
+  "access_token": "ya29....",
+  "user_command": "Analyze my unread messages and organize them into structured labels.",
+  "gmail_query": "is:unread",
+  "max_results": 10
+}
+```

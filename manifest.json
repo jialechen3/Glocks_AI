@@ -12,6 +12,9 @@
   "permissions": [
     "identity"
   ],
+  "host_permissions": [
+    "http://127.0.0.1:8000/*"
+  ],
   "oauth2": {
     "client_id": "473167517964-l6dfja1f4unke3qkhaurqftnuj7ov170.apps.googleusercontent.com",
     "scopes": [
