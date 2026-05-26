@@ -1,6 +1,6 @@
-# AI Email Assistant
+# Glooks Mail AI Assistant
 
-AI Email Assistant is a Chrome extension project for managing Gmail with natural-language instructions. The goal is to let a user talk to an agent and ask it to do useful inbox work such as deleting spam, organizing messages into categories, or preparing email context for more advanced automation.
+Glooks Mail AI Assistant is a Chrome extension project for managing Gmail with natural-language instructions. The goal is to let a user talk to an agent and ask it to do useful inbox work such as deleting spam, organizing messages into categories, or preparing email context for more advanced automation.
 
 ## What it does
 
@@ -13,12 +13,11 @@ AI Email Assistant is a Chrome extension project for managing Gmail with natural
 
 ## Current project status
 
-This repository currently contains the Chrome extension foundation:
+This repository currently contains:
 
-- `manifest.json` for extension configuration and OAuth scopes
-- `popup.html` and `popup.js` for the user command interface
-- `background.js` for Google authentication flow
-- `config.js` for local configuration values
+- a React popup frontend powered by Vite
+- a Chrome extension shell for OAuth and popup hosting
+- a FastAPI backend for Gmail extraction and AI preparation
 
 The AI execution layer is not fully implemented yet. Right now, the project authenticates with Gmail and is structured so you can add either:
 
@@ -44,10 +43,19 @@ See [SECURITY.md](SECURITY.md) for a short checklist before publishing or deploy
 ## Local setup
 
 1. Clone the repository.
-2. Open Chrome and go to `chrome://extensions`.
-3. Enable Developer Mode.
-4. Click `Load unpacked` and select this project folder.
-5. Configure the Google OAuth client ID if you want to use your own Google Cloud project.
+2. Install frontend dependencies with `npm install`.
+3. Build the extension with `npm run build`.
+4. Open Chrome and go to `chrome://extensions`.
+5. Enable Developer Mode.
+6. Click `Load unpacked` and select the `dist` folder.
+7. Start the backend if you want live Gmail extraction with `python -m uvicorn backend.main:app --reload`.
+
+## Frontend structure
+
+- `src/` contains the React popup app
+- `public/` contains extension files that Vite copies into `dist/`
+- `popup.html` is the Vite HTML entry for the popup
+- `backend/` contains the FastAPI service
 
 ## Suggested next steps
 

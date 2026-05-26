@@ -16,3 +16,7 @@ __pycache__/
 *.pyc
 venv/
 .venv/
+
+# Frontend build files
+node_modules/
+dist/
