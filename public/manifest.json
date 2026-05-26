@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "AI Email Assistant",
+  "name": "Glooks Mail AI Assistant",
   "version": "1.0",
   "action": {
     "default_popup": "popup.html"
   },
   "background": {
     "service_worker": "background.js",
-    "type": "module" 
+    "type": "module"
   },
   "permissions": [
     "identity"
