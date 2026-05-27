@@ -56,6 +56,7 @@ See [SECURITY.md](SECURITY.md) for a short checklist before publishing or deploy
 - `public/` contains extension files that Vite copies into `dist/`
 - `popup.html` is the Vite HTML entry for the popup
 - `backend/` contains the FastAPI service
+- `docs/` contains planning and interface specs such as the AI agent response contract
 
 ## Suggested next steps
 
