@@ -288,3 +288,141 @@ After this doc, the next backend pieces should be:
 4. frontend rendering for `summary`, `warnings`, and `suggested_actions`
 
 Once that contract feels stable, the mock analyzer can be replaced with a real LLM call.
+
+## Delivery plan
+
+### Recommended language and framework
+
+Use the existing stack instead of introducing a second backend language.
+
+- Backend AI layer: `Python`
+- API framework: `FastAPI`
+- Data contracts and validation: `Pydantic`
+- Gmail and external API access: `httpx`
+- Frontend UI: `React` with `Vite`
+
+### Why this stack
+
+`Python + FastAPI` is the best fit for the AI layer here because:
+
+- the backend already uses Python and FastAPI
+- Pydantic makes model input and output validation strict and easy to maintain
+- AI orchestration, prompt building, and JSON schema validation are simpler in Python than adding a second Node service
+- Gmail data preparation is already implemented in Python, so the AI layer can reuse the same models directly
+
+Do not move the AI orchestration into the browser extension. Keep the extension focused on auth, preview, and user approval. Put all AI calls and safety checks in the backend.
+
+### Phase 1: stabilize the data contract
+
+Goal: make sure prepared Gmail data is clean, consistent, and ready for model use.
+
+Build next:
+
+1. Add `backend/agent_models.py` with:
+   - `AgentAnalyzeRequest`
+   - `AgentAnalyzeResponse`
+   - `SuggestedAction`
+   - `MessageGroup`
+2. Add strict enums for:
+   - `intent`
+   - `risk_level`
+   - `action_type`
+3. Normalize prepared email fields before analysis:
+   - missing subject handling
+   - sender parsing
+   - safe body truncation
+   - optional HTML cleanup
+
+### Phase 2: ship a rule-based analyzer first
+
+Goal: make the product useful before adding an LLM dependency.
+
+Build next:
+
+1. Create `backend/agent_service.py`
+2. Add a deterministic analyzer that can:
+   - detect promotions by sender and keywords
+   - detect work emails by domain and meeting language
+   - detect newsletters by recurring formats and unsubscribe hints
+3. Return the exact response format defined in this document
+4. Add unit tests for expected classifications and safety behavior
+
+This gives you a safe baseline for UI work and backend execution mapping.
+
+### Phase 3: add LLM analysis behind the same contract
+
+Goal: improve classification quality without changing the frontend contract.
+
+Recommended approach:
+
+- Keep `POST /api/agent/analyze` unchanged
+- Add an LLM-backed analyzer implementation behind an internal service boundary
+- Pass only prepared and minimized email data into the model
+- Force structured JSON output that matches `AgentAnalyzeResponse`
+
+Suggested backend structure:
+
+- `backend/agent_models.py`
+- `backend/agent_service.py`
+- `backend/rule_analyzer.py`
+- `backend/llm_analyzer.py`
+- `backend/prompt_builder.py`
+
+### LLM integration recommendation
+
+For AI hooking to the data, use:
+
+- `Python` for orchestration
+- a server-side LLM SDK client
+- `Pydantic` models as the source of truth for request and response schemas
+
+Implementation pattern:
+
+1. `prepare_gmail_messages()` gathers Gmail data
+2. `prompt_builder.py` converts that data into a compact analysis payload
+3. `llm_analyzer.py` sends the request to the model
+4. the response is validated into `AgentAnalyzeResponse`
+5. unsupported or low-confidence actions are converted to `flag_for_review`
+
+### Phase 4: frontend approval flow
+
+Goal: make AI suggestions reviewable before any Gmail action runs.
+
+Build next:
+
+1. Render `summary`
+2. Render grouped results
+3. Show warnings and risk level clearly
+4. Let the user approve or reject each suggested action
+5. Send only approved actions to a future execute endpoint
+
+### Phase 5: execution layer and safety
+
+Goal: connect approved AI actions back to Gmail safely.
+
+Build next:
+
+1. Add `POST /api/agent/execute`
+2. Map each `action_type` to an explicit backend function
+3. Re-check message IDs against the prepared result set
+4. Block destructive actions unless confirmation is present
+5. Log all executed actions for auditability
+
+### Recommended implementation order
+
+1. `agent_models.py`
+2. rule-based `agent_service.py`
+3. `POST /api/agent/analyze`
+4. frontend preview UI
+5. LLM-backed analyzer
+6. `POST /api/agent/execute`
+
+### Architecture decision
+
+For this project, the strongest path is:
+
+- `React` in the extension for UX
+- `Python + FastAPI` in the backend for Gmail prep, AI analysis, and execution
+- one shared response contract enforced with `Pydantic`
+
+Avoid splitting AI logic across both `Node` and `Python`. One backend language will keep the data flow simpler, cheaper to maintain, and much easier to debug.
