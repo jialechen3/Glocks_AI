@@ -4,6 +4,12 @@ from typing import Any
 import httpx
 
 from .models import PreparedEmail
+from .normalization import (
+    normalize_address,
+    normalize_body_text,
+    normalize_snippet,
+    normalize_subject,
+)
 
 
 GMAIL_API_BASE = "https://gmail.googleapis.com/gmail/v1/users/me"
@@ -66,12 +72,12 @@ def _prepare_email(message: dict[str, Any]) -> PreparedEmail:
         message_id=message.get("id", ""),
         thread_id=message.get("threadId"),
         label_ids=message.get("labelIds") or [],
-        subject=headers.get("subject"),
-        from_address=headers.get("from"),
-        to_address=headers.get("to"),
+        subject=normalize_subject(headers.get("subject")),
+        from_address=normalize_address(headers.get("from")),
+        to_address=normalize_address(headers.get("to")),
         date=headers.get("date"),
-        snippet=message.get("snippet"),
-        body_text=_extract_body_text(payload),
+        snippet=normalize_snippet(message.get("snippet")),
+        body_text=normalize_body_text(_extract_body_text(payload)),
     )
 
 

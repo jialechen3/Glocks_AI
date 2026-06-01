@@ -1,6 +1,6 @@
 # FastAPI Backend
 
-This backend accepts a Gmail access token from the Chrome extension, fetches message data from the Gmail API, and returns a simplified email payload that is easier to feed into AI pipelines.
+This backend accepts a Gmail access token from the Chrome extension, fetches message data from the Gmail API, and returns a normalized email payload that is easier to feed into AI pipelines.
 
 ## Run locally
 
@@ -33,3 +33,15 @@ Example request body:
   "max_results": 10
 }
 ```
+
+## Phase 1 data contract
+
+The prepare layer now normalizes Gmail message data before any analyzer uses it:
+
+- missing subjects become `(no subject)`
+- sender and recipient addresses are normalized
+- snippets and body text are whitespace-cleaned
+- HTML bodies are reduced to plain text
+- long bodies are truncated to a safe model-friendly size
+
+The future AI analyzer schema is defined in `backend/agent_models.py` so the request and response contract is stable before model logic is added.
