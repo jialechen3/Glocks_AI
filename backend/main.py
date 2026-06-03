@@ -1,6 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from .agent_models import AgentAnalyzeRequest, AgentAnalyzeResponse
+from .agent_service import analyze_request
 from .gmail_client import GmailClientError, prepare_gmail_messages
 from .models import GmailPrepareRequest, GmailPrepareResponse
 
@@ -41,3 +43,8 @@ async def prepare_gmail_payload(request: GmailPrepareRequest) -> GmailPrepareRes
         total_emails=len(emails),
         emails=emails,
     )
+
+
+@app.post("/api/agent/analyze", response_model=AgentAnalyzeResponse)
+async def analyze_agent_payload(request: AgentAnalyzeRequest) -> AgentAnalyzeResponse:
+    return analyze_request(request)
